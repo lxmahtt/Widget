@@ -1,13 +1,11 @@
 package com.kotlin.widget
 
-import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Handler
 import android.text.format.DateUtils
 import android.util.AttributeSet
@@ -20,9 +18,10 @@ import java.util.*
  */
 @RemoteView
 class Clock @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyle: Int = 0) : View(context, attrs, defStyle) {
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : View(context, attrs, defStyle) {
 
     //当前时间
     private var mCalendar: Calendar? = null
@@ -107,8 +106,10 @@ class Clock @JvmOverloads constructor(
             filter.addAction(Intent.ACTION_TIME_TICK)
             filter.addAction(Intent.ACTION_TIME_CHANGED)
             filter.addAction(Intent.ACTION_TIMEZONE_CHANGED)
-            context.registerReceiver(mIntentReceiver, filter, null,
-                    mHandler)
+            context.registerReceiver(
+                mIntentReceiver, filter, null,
+                mHandler
+            )
         }
         mCalendar = Calendar.getInstance()
         onTimeChanged()
@@ -158,8 +159,10 @@ class Clock @JvmOverloads constructor(
         if (availableWidth < w || availableHeight < h) {
             scaled = true
             //获取画布缩放比例
-            val scale = Math.min(availableWidth.toFloat() / w.toFloat(),
-                    availableHeight.toFloat() / h.toFloat())
+            val scale = Math.min(
+                availableWidth.toFloat() / w.toFloat(),
+                availableHeight.toFloat() / h.toFloat()
+            )
             canvas.save()
             canvas.scale(scale, scale, x.toFloat(), y.toFloat())
         }
@@ -226,8 +229,10 @@ class Clock @JvmOverloads constructor(
 
     private fun updateContentDescription() {
         val flags = DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_24HOUR
-        val contentDescription = DateUtils.formatDateTime(context,
-                System.currentTimeMillis(), flags)
+        val contentDescription = DateUtils.formatDateTime(
+            context,
+            System.currentTimeMillis(), flags
+        )
         setContentDescription(contentDescription)
     }
 }
