@@ -7,7 +7,11 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-    <com.kotlin.widget.Clock
+    <com.kotlin.widget.widget.Clock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <com.kotlin.widget.widget.WatchBoard
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

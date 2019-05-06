@@ -1,4 +1,4 @@
-package com.kotlin.widget
+package com.kotlin.widget.widget
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,6 +11,7 @@ import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.View
 import android.widget.RemoteViews.RemoteView
+import com.kotlin.widget.R
 import java.util.*
 
 /**
