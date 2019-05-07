@@ -17,12 +17,13 @@ import java.util.*
 /**
  * 有时针、分针、秒针的显示时钟
  */
-@RemoteView
+/**
+ * 有时针、分针、秒针的显示时钟
+ */
 class Clock @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyle: Int = 0
-) : View(context, attrs, defStyle) {
+    defStyle: Int = 0) : View(context, attrs, defStyle) {
 
     //当前时间
     private var mCalendar: Calendar? = null
@@ -82,11 +83,10 @@ class Clock @JvmOverloads constructor(
     init {
         mCalendar = Calendar.getInstance()
 
-
-        mDial = resources.getDrawable(R.mipmap.clock_plate)
-        mHourHand = resources.getDrawable(R.mipmap.clock_hour)
-        mMinuteHand = resources.getDrawable(R.mipmap.clock_minute)
-        mSecondHand = resources.getDrawable(R.mipmap.clock_second)
+        mDial = context.resources.getDrawable(R.mipmap.clock_plate)
+        mHourHand = context.resources.getDrawable(R.mipmap.clock_hour)
+        mMinuteHand = context.resources.getDrawable(R.mipmap.clock_minute)
+        mSecondHand = context.resources.getDrawable(R.mipmap.clock_second)
 
         mDialWidth = mDial.intrinsicWidth
         mDialHeight = mDial.intrinsicHeight
@@ -107,10 +107,8 @@ class Clock @JvmOverloads constructor(
             filter.addAction(Intent.ACTION_TIME_TICK)
             filter.addAction(Intent.ACTION_TIME_CHANGED)
             filter.addAction(Intent.ACTION_TIMEZONE_CHANGED)
-            context.registerReceiver(
-                mIntentReceiver, filter, null,
-                mHandler
-            )
+            context.registerReceiver(mIntentReceiver, filter, null,
+                mHandler)
         }
         mCalendar = Calendar.getInstance()
         onTimeChanged()
@@ -125,8 +123,44 @@ class Clock @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(mDialWidth, mDialHeight)
+        var widthResult = 0
+        //view根据xml中layout_width和layout_height测量出对应的宽度和高度值，
+        val widthSpecMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
+        when (widthSpecMode) {
+            MeasureSpec.UNSPECIFIED -> widthResult = widthSpecSize
+            MeasureSpec.AT_MOST//wrap_content时候
+            -> widthResult = mDialWidth
+            MeasureSpec.EXACTLY ->
+                //当xml布局中是准确的值，比如200dp是，判断一下当前view的宽度和准确值,取两个中大的，这样的好处是子View至少保持原来大小
+                widthResult = widthSpecSize
+        }
+
+        var heightResult = 0
+        val heightSpecMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSpecSize = MeasureSpec.getSize(heightMeasureSpec)
+        when (heightSpecMode) {
+            MeasureSpec.UNSPECIFIED -> heightResult = heightSpecSize
+            MeasureSpec.AT_MOST//wrap_content时候
+            -> heightResult = mDialHeight
+            MeasureSpec.EXACTLY ->
+                //当xml布局中是准确的值，比如200dp是，判断一下当前view的宽度和准确值,取两个中大的，这样的好处是子View至少保持原来大小
+//                heightResult = Math.max(getContentHeight(),heightSpecSize)
+                heightResult = heightSpecSize
+
+        }
+
+        setMeasuredDimension(widthResult, heightResult)
     }
+
+    private fun getContentHeight(): Int {
+        return mDialWidth + paddingLeft + paddingRight
+    }
+
+    private fun getContentWidth(): Int {
+        return mDialHeight + paddingTop + paddingBottom
+    }
+
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -148,22 +182,15 @@ class Clock @JvmOverloads constructor(
         val x = availableWidth / 2
         val y = availableHeight / 2
 
-        //获取表盘的宽高
-        val dial = mDial
-        var w = dial.intrinsicWidth
-        var h = dial.intrinsicHeight
-
         //默认是不缩放的
         var scaled = false
 
         //如果View的宽高比表盘小，对画布进行缩放
-        if (availableWidth < w || availableHeight < h) {
+        if (availableWidth != mDialWidth || availableHeight != mDialHeight) {
             scaled = true
             //获取画布缩放比例
-            val scale = Math.min(
-                availableWidth.toFloat() / w.toFloat(),
-                availableHeight.toFloat() / h.toFloat()
-            )
+            val scale = Math.min(availableWidth.toFloat() / mDialWidth.toFloat(),
+                availableHeight.toFloat() / mDialHeight.toFloat())
             canvas.save()
             canvas.scale(scale, scale, x.toFloat(), y.toFloat())
         }
@@ -171,39 +198,37 @@ class Clock @JvmOverloads constructor(
         //画表盘
         if (changed) {
             //将表盘绘制在：View的宽高减去图片的宽高
-            dial.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
+            mDial.setBounds(x - mDialWidth / 2, y - mDialHeight / 2, x + mDialWidth / 2, y + mDialHeight / 2)
         }
-        dial.draw(canvas)
+        mDial.draw(canvas)
         canvas.save()
 
+        var w: Int
+        var h: Int
         //画时针
         canvas.rotate(mHour / 12.0f * 360.0f, x.toFloat(), y.toFloat())
-        val hourHand = mHourHand
         if (changed) {
-            w = hourHand.intrinsicWidth
-            h = hourHand.intrinsicHeight
-            hourHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
+            w = mHourHand.intrinsicWidth
+            h = mHourHand.intrinsicHeight
+            mHourHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
         }
-        hourHand.draw(canvas)
+        mHourHand.draw(canvas)
 
         canvas.restore()
         canvas.save()
         canvas.rotate(mMinutes / 60.0f * 360.0f, x.toFloat(), y.toFloat())
-        val minuteHand = mMinuteHand
         if (changed) {
-
-            w = minuteHand.intrinsicWidth
-            h = minuteHand.intrinsicHeight
-            minuteHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
+            w = mMinuteHand.intrinsicWidth
+            h = mMinuteHand.intrinsicHeight
+            mMinuteHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
         }
-        minuteHand.draw(canvas)
+        mMinuteHand.draw(canvas)
 
         canvas.restore()
         canvas.save()
         canvas.rotate(mSecond / 60.0f * 360.0f, x.toFloat(), y.toFloat())
         val secondHand = mSecondHand
         if (changed) {
-
             w = secondHand.intrinsicWidth
             h = secondHand.intrinsicHeight
             secondHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
@@ -230,10 +255,8 @@ class Clock @JvmOverloads constructor(
 
     private fun updateContentDescription() {
         val flags = DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_24HOUR
-        val contentDescription = DateUtils.formatDateTime(
-            context,
-            System.currentTimeMillis(), flags
-        )
+        val contentDescription = DateUtils.formatDateTime(context,
+            System.currentTimeMillis(), flags)
         setContentDescription(contentDescription)
     }
 }
