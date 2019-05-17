@@ -62,15 +62,15 @@ class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) :
 
     init {
         @SuppressLint("Recycle", "CustomViewStyleable")
-        val typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.vericationCodeView)
-        mEtNumber = typedArray.getInteger(R.styleable.vericationCodeView_vcv_et_number, 4)
-        val inputType = typedArray.getInt(R.styleable.vericationCodeView_vcv_et_inputType, VCInputType.NUMBER.ordinal)
+        val typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.verificationCodeView)
+        mEtNumber = typedArray.getInteger(R.styleable.verificationCodeView_vcv_et_number, 4)
+        val inputType = typedArray.getInt(R.styleable.verificationCodeView_vcv_et_inputType, VCInputType.NUMBER.ordinal)
         mEtInputType = VCInputType.values()[inputType]
-        mEtWidth = typedArray.getDimensionPixelSize(R.styleable.vericationCodeView_vcv_et_width, 120)
-        mEtTextColor = typedArray.getColor(R.styleable.vericationCodeView_vcv_et_text_color, Color.BLACK)
-        mEtTextSize = typedArray.getDimensionPixelSize(R.styleable.vericationCodeView_vcv_et_text_size, 16).toFloat()
-        mEtTextBg = typedArray.getResourceId(R.styleable.vericationCodeView_vcv_et_bg, 0)
-        mCursorDrawable = typedArray.getResourceId(R.styleable.vericationCodeView_vcv_et_cursor, R.drawable.et_verification_cursor)
+        mEtWidth = typedArray.getDimensionPixelSize(R.styleable.verificationCodeView_vcv_et_width, 120)
+        mEtTextColor = typedArray.getColor(R.styleable.verificationCodeView_vcv_et_text_color, Color.BLACK)
+        mEtTextSize = typedArray.getDimensionPixelSize(R.styleable.verificationCodeView_vcv_et_text_size, 16).toFloat()
+        mEtTextBg = typedArray.getResourceId(R.styleable.verificationCodeView_vcv_et_bg, 0)
+        mCursorDrawable = typedArray.getResourceId(R.styleable.verificationCodeView_vcv_et_cursor, R.drawable.et_verification_cursor)
 
         //释放资源
         typedArray.recycle()
