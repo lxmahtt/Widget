@@ -19,7 +19,7 @@ import com.kotlin.widget.R
 class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) : LinearLayout(mContext, attrs),
     TextWatcher, View.OnKeyListener, View.OnFocusChangeListener {
     private var endTime: Long = 0
-    private var onCodeFinishListener: OnCodeFinishListener? = null
+    var onCodeFinishListener: OnCodeFinishListener? = null
 
     /**
      * 输入框数量
@@ -143,9 +143,8 @@ class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) :
     }
 
     override fun afterTextChanged(s: Editable) {
-        if (s.isNotEmpty()) {
-            focus()
-        }
+        //输入完成后，转换光标
+        focus()
     }
 
     override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
@@ -167,6 +166,7 @@ class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) :
      * 获取焦点
      */
     private fun focus() {
+        //TextView数量
         val count = childCount
         var editText: EditText
         //利用for循环找出还最前面那个还没被输入字符的EditText，并把焦点移交给它。
@@ -175,15 +175,25 @@ class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) :
             if (editText.text.isEmpty()) {
                 editText.isCursorVisible = true
                 editText.requestFocus()
-                return
+                break
             } else {
                 editText.isCursorVisible = false
             }
         }
-        //如果最后一个输入框有字符，则返回结果
-        val lastEditText = getChildAt(mEtNumber - 1) as EditText
-        if (lastEditText.text.isNotEmpty()) {
-            getResult()
+        val stringBuffer = StringBuffer()
+        for (i in 0 until mEtNumber) {
+            editText = getChildAt(i) as EditText
+            stringBuffer.append(editText.text)
+        }
+        var codeText = stringBuffer.toString()
+        if (codeText.length == mEtNumber) {
+            if (onCodeFinishListener != null) {
+                onCodeFinishListener!!.onComplete(codeText)
+            }
+        } else {
+            if (onCodeFinishListener != null) {
+                onCodeFinishListener!!.onChange()
+            }
         }
     }
 
@@ -204,18 +214,6 @@ class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) :
         }
     }
 
-    private fun getResult() {
-        val stringBuffer = StringBuffer()
-        var editText: EditText
-        for (i in 0 until mEtNumber) {
-            editText = getChildAt(i) as EditText
-            stringBuffer.append(editText.text)
-        }
-        if (onCodeFinishListener != null) {
-            onCodeFinishListener!!.onComplete(stringBuffer.toString())
-        }
-    }
-
     override fun onFocusChange(v: View, hasFocus: Boolean) {
         if (hasFocus) {
             focus()
@@ -224,5 +222,7 @@ class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) :
 
     interface OnCodeFinishListener {
         fun onComplete(content: String)
+        fun onChange()
     }
 }
+
