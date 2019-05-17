@@ -16,9 +16,7 @@ import java.util.*
 
 /**
  * 有时针、分针、秒针的显示时钟
- */
-/**
- * 有时针、分针、秒针的显示时钟
+ * 换图，表盘，时针，分针，秒针图片
  */
 class Clock @JvmOverloads constructor(
     context: Context,

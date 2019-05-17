@@ -12,7 +12,6 @@ import com.kotlin.widget.utils.SizeUtils;
 import java.util.Calendar;
 
 public class WatchBoard extends View {
-
     private float mRadius; // 圆形半径
     private float mPadding; // 边距
     private float mTextSize; // 文字大小
