@@ -9,13 +9,19 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-    <com.kotlin.widget.widget.Clock
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+        <com.kotlin.widget.widget.Clock
+                android:layout_width="150dp"
+                android:layout_height="150dp"/>
 
-    <com.kotlin.widget.widget.WatchBoard
-            android:layout_width="200dp"
-            android:layout_height="200dp"/>
+        <com.kotlin.widget.widget.WatchBoard
+                android:layout_width="150dp"
+                android:layout_marginLeft="20dp"
+                android:layout_height="150dp"/>
+    </LinearLayout>
 
     <com.kotlin.widget.widget.VerificationCodeView
             android:layout_marginTop="20dp"
@@ -32,14 +38,24 @@
 
     </com.kotlin.widget.widget.VerificationCodeView>
 
-    <com.kotlin.widget.widget.SwitchButton
-            android:layout_marginLeft="20dp"
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:frameDrawable="@mipmap/switch_frame"
-            app:stateDrawable="@mipmap/artboard"
-            app:stateMaskDrawable="@mipmap/switch_state_mask"
-            app:sliderDrawable="@mipmap/switch_slider_normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:orientation="horizontal">
+        <com.kotlin.widget.widget.SwitchButtonDrawable
+                android:layout_marginLeft="20dp"
+                app:frameDrawable="@mipmap/switch_frame"
+                app:stateDrawable="@mipmap/art_board"
+                app:stateMaskDrawable="@mipmap/switch_state_mask"
+                app:sliderDrawable="@mipmap/switch_slider_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <com.kotlin.widget.widget.SwitchButton
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </LinearLayout>

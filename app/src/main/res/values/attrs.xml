@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--自定义属性-->
+    <!--WatchBoard自定义属性-->
     <declare-styleable name="WatchBoard">
         <!--表盘的内边距-->
         <attr name="wb_padding" format="dimension"/>
@@ -29,57 +29,57 @@
         <attr name="wb_second_pointer_color" format="color"/>
     </declare-styleable>
 
-    <!-- 自定义验证码输入框-->
+    <!-- verificationCodeView自定义属性-->
     <declare-styleable name="verificationCodeView">
         <!--输入框的数量-->
-        <attr name="vcv_et_number" format="integer" />
+        <attr name="vcv_et_number" format="integer"/>
         <!--输入类型-->
         <attr name="vcv_et_inputType">
-            <enum name="number" value="0" />
-            <enum name="numberPassword" value="1" />
-            <enum name="text" value="2" />
-            <enum name="textPassword" value="3" />
+            <enum name="number" value="0"/>
+            <enum name="numberPassword" value="1"/>
+            <enum name="text" value="2"/>
+            <enum name="textPassword" value="3"/>
         </attr>
         <!--输入框的宽度-->
-        <attr name="vcv_et_width" format="dimension|reference" />
+        <attr name="vcv_et_width" format="dimension|reference"/>
         <!--输入框文字颜色-->
-        <attr name="vcv_et_text_color" format="color|reference" />
+        <attr name="vcv_et_text_color" format="color|reference"/>
         <!--输入框文字大小-->
-        <attr name="vcv_et_text_size" format="dimension|reference" />
+        <attr name="vcv_et_text_size" format="dimension|reference"/>
         <!--输入框背景-->
-        <attr name="vcv_et_bg" format="reference" />
+        <attr name="vcv_et_bg" format="reference"/>
         <!--光标样式-->
-        <attr name="vcv_et_cursor" format="reference" />
+        <attr name="vcv_et_cursor" format="reference"/>
     </declare-styleable>
 
-    <!--<declare-styleable name="SwitchButton">-->
-        <!--<attr name="sb_shadow_radius" format="reference|dimension"/>-->
-        <!--<attr name="sb_shadow_offset" format="reference|dimension"/>-->
-        <!--<attr name="sb_shadow_color" format="reference|color"/>-->
-        <!--<attr name="sb_uncheck_color" format="reference|color"/>-->
-        <!--<attr name="sb_checked_color" format="reference|color"/>-->
-
-        <!--<attr name="sb_border_width" format="reference|dimension"/>-->
-        <!--<attr name="sb_checkline_color" format="reference|color"/>-->
-        <!--<attr name="sb_checkline_width" format="reference|dimension"/>-->
-        <!--<attr name="sb_uncheckcircle_color" format="reference|color"/>-->
-        <!--<attr name="sb_uncheckcircle_width" format="reference|dimension"/>-->
-        <!--<attr name="sb_uncheckcircle_radius" format="reference|dimension"/>-->
-
-        <!--<attr name="sb_checked" format="reference|boolean"/>-->
-        <!--<attr name="sb_shadow_effect" format="reference|boolean"/>-->
-        <!--<attr name="sb_effect_duration" format="reference|integer"/>-->
-        <!--<attr name="sb_button_color" format="reference|color"/>-->
-        <!--<attr name="sb_show_indicator" format="reference|boolean"/>-->
-        <!--<attr name="sb_background" format="reference|color"/>-->
-        <!--<attr name="sb_enable_effect" format="reference|boolean"/>-->
-    <!--</declare-styleable>-->
-
+    <!--SwitchButton自定义属性-->
     <declare-styleable name="SwitchButton">
-        <attr name="frameDrawable" format="reference|color"/>
-        <attr name="stateDrawable" format="reference|color"/>
-        <attr name="stateMaskDrawable" format="reference|color"/>
-        <attr name="sliderDrawable" format="reference|color"/>
-        <attr name="withTextInterval" format="dimension"/>
+        <attr name="switch_shadowRadius" format="reference|dimension"/>
+        <attr name="switch_shadowOffset" format="reference|dimension"/>
+        <attr name="switch_shadowColor" format="reference|color"/>
+        <attr name="switch_uncheckColor" format="reference|color"/>
+        <attr name="switch_checkedColor" format="reference|color"/>
+        <attr name="switch_borderWidth" format="reference|dimension"/>
+        <attr name="switch_checkLineColor" format="reference|color"/>
+        <attr name="switch_checkLineWidth" format="reference|dimension"/>
+        <attr name="switch_uncheckCircleColor" format="reference|color"/>
+        <attr name="switch_uncheckCircleWidth" format="reference|dimension"/>
+        <attr name="switch_uncheckCircleRadius" format="reference|dimension"/>
+        <attr name="switch_checked" format="reference|boolean"/>
+        <attr name="switch_shadowEffect" format="reference|boolean"/>
+        <attr name="switch_effectDuration" format="reference|integer"/>
+        <attr name="switch_buttonColor" format="reference|color"/>
+        <attr name="switch_showIndicator" format="reference|boolean"/>
+        <attr name="switch_background" format="reference|color"/>
+        <attr name="switch_enableEffect" format="reference|boolean"/>
+    </declare-styleable>
+
+    <!--switchButtonDrawable自定义属性-->
+    <declare-styleable name="SwitchButtonDrawable">
+        <attr name="switch_frameDrawable" format="reference|color"/>
+        <attr name="switch_stateDrawable" format="reference|color"/>
+        <attr name="switch_stateMaskDrawable" format="reference|color"/>
+        <attr name="switch_sliderDrawable" format="reference|color"/>
+        <attr name="switch_withTextInterval" format="dimension"/>
     </declare-styleable>
 </resources>

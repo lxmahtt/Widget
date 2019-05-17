@@ -18,7 +18,7 @@ import android.widget.CompoundButton
 import android.widget.Scroller
 import com.kotlin.widget.R
 
-class SwitchButton @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
     CompoundButton(context, attrs, defStyle) {
 
     companion object {
@@ -63,15 +63,15 @@ class SwitchButton @JvmOverloads constructor(context: Context, attrs: AttributeS
         var stateMaskDrawable: Drawable? = null
         var sliderDrawable: Drawable? = null
         if (attrs != null) {
-            val typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.SwitchButton)
+            val typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.SwitchButtonDrawable)
             if (typedArray != null) {
                 withTextInterval =
-                    typedArray.getDimension(R.styleable.SwitchButton_withTextInterval, withTextInterval.toFloat())
+                    typedArray.getDimension(R.styleable.SwitchButtonDrawable_switch_withTextInterval, withTextInterval.toFloat())
                         .toInt()
-                frameDrawable = typedArray.getDrawable(R.styleable.SwitchButton_frameDrawable)
-                stateDrawable = typedArray.getDrawable(R.styleable.SwitchButton_stateDrawable)
-                stateMaskDrawable = typedArray.getDrawable(R.styleable.SwitchButton_stateMaskDrawable)
-                sliderDrawable = typedArray.getDrawable(R.styleable.SwitchButton_sliderDrawable)
+                frameDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_frameDrawable)
+                stateDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateDrawable)
+                stateMaskDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateMaskDrawable)
+                sliderDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_sliderDrawable)
                 typedArray.recycle()
             }
         }
