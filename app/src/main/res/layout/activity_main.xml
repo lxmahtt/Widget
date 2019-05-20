@@ -45,10 +45,10 @@
             android:orientation="horizontal">
         <com.kotlin.widget.widget.SwitchButtonDrawable
                 android:layout_marginLeft="20dp"
-                app:frameDrawable="@mipmap/switch_frame"
-                app:stateDrawable="@mipmap/art_board"
-                app:stateMaskDrawable="@mipmap/switch_state_mask"
-                app:sliderDrawable="@mipmap/switch_slider_normal"
+                app:switch_frameDrawable="@mipmap/switch_frame"
+                app:switch_stateDrawable="@mipmap/switch_use_state"
+                app:switch_stateMaskDrawable="@mipmap/switch_state_mask"
+                app:switch_sliderDrawable="@mipmap/switch_use_slider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

@@ -66,7 +66,10 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
             val typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.SwitchButtonDrawable)
             if (typedArray != null) {
                 withTextInterval =
-                    typedArray.getDimension(R.styleable.SwitchButtonDrawable_switch_withTextInterval, withTextInterval.toFloat())
+                    typedArray.getDimension(
+                        R.styleable.SwitchButtonDrawable_switch_withTextInterval,
+                        withTextInterval.toFloat()
+                    )
                         .toInt()
                 frameDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_frameDrawable)
                 stateDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateDrawable)
@@ -327,7 +330,7 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
      * @param stateMaskDrawable 状态遮罩图片
      * @param sliderDrawable    滑块图片
      */
-    fun setDrawables(
+    private fun setDrawables(
         frameBitmap: Drawable?,
         stateDrawable: Drawable?,
         stateMaskDrawable: Drawable?,
