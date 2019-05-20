@@ -95,11 +95,14 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // 计算宽度
         var measureWidth: Int
-        measureWidth = when (MeasureSpec.getMode(widthMeasureSpec)) {
+        //view根据xml中layout_width和layout_height测量出对应的宽度和高度值，
+        val widthSpecMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
+        measureWidth = when (widthSpecMode) {
             MeasureSpec.AT_MOST   // 如果 widthSize 是当前视图可使用的最大宽度
             -> compoundPaddingLeft + compoundPaddingRight
             MeasureSpec.EXACTLY   // 如果 widthSize 是当前视图可使用的绝对宽度
-            -> MeasureSpec.getSize(widthMeasureSpec)
+            -> widthSpecSize
             MeasureSpec.UNSPECIFIED   // 如果 widthSize 对当前视图宽度的计算没有任何参考意义
             -> compoundPaddingLeft + compoundPaddingRight
             else -> compoundPaddingLeft + compoundPaddingRight
@@ -107,11 +110,13 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
 
         // 计算高度
         var measureHeight: Int
-        measureHeight = when (MeasureSpec.getMode(heightMeasureSpec)) {
+        val heightSpecMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSpecSize = MeasureSpec.getSize(heightMeasureSpec)
+        measureHeight = when (heightSpecMode) {
             MeasureSpec.AT_MOST   // 如果 heightSize 是当前视图可使用的最大宽度
             -> (if (frameDrawable != null) frameDrawable!!.intrinsicHeight else 0) + compoundPaddingTop + compoundPaddingBottom
             MeasureSpec.EXACTLY//如果heightSize是当前视图可使用的绝对宽度
-            -> MeasureSpec.getSize(heightMeasureSpec)
+            -> heightSpecSize
             MeasureSpec.UNSPECIFIED   // 如果 heightSize 对当前视图宽度的计算没有任何参考意义
             -> (if (frameDrawable != null) frameDrawable!!.intrinsicHeight else 0) + compoundPaddingTop + compoundPaddingBottom
             else -> (if (frameDrawable != null) frameDrawable!!.intrinsicHeight else 0) + compoundPaddingTop + compoundPaddingBottom

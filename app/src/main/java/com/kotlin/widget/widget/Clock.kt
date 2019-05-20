@@ -211,8 +211,9 @@ class Clock @JvmOverloads constructor(
             mHourHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
         }
         mHourHand.draw(canvas)
-
         canvas.restore()
+
+        //画分针
         canvas.save()
         canvas.rotate(mMinutes / 60.0f * 360.0f, x.toFloat(), y.toFloat())
         if (changed) {
@@ -221,8 +222,9 @@ class Clock @JvmOverloads constructor(
             mMinuteHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
         }
         mMinuteHand.draw(canvas)
-
         canvas.restore()
+
+        //画秒针
         canvas.save()
         canvas.rotate(mSecond / 60.0f * 360.0f, x.toFloat(), y.toFloat())
         val secondHand = mSecondHand
