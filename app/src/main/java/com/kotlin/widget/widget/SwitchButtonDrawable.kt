@@ -18,6 +18,7 @@ import android.widget.CompoundButton
 import android.widget.Scroller
 import com.kotlin.widget.R
 
+
 class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
     CompoundButton(context, attrs, defStyle) {
 
@@ -90,6 +91,7 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         touchSlop = config.scaledTouchSlop
         isChecked = isChecked
         isClickable = true //设置允许点击，当用户点击在按钮其它区域的时候就会切换状态
+
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -135,33 +137,19 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         setMeasuredDimension(measureWidth, measureHeight)
     }
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-        val drawables = compoundDrawables
-        var drawableRightWidth = 0
-        var drawableTopHeight = 0
-        var drawableBottomHeight = 0
-        if (drawables.size > 1 && drawables[1] != null) {
-            drawableTopHeight = drawables[1].intrinsicHeight + compoundDrawablePadding
-        }
-        if (drawables.size > 2 && drawables[2] != null) {
-            drawableRightWidth = drawables[2].intrinsicWidth + compoundDrawablePadding
-        }
-        if (drawables.size > 3 && drawables[3] != null) {
-            drawableBottomHeight = drawables[3].intrinsicHeight + compoundDrawablePadding
-        }
-
-        buttonLeft =
-            width - (if (frameDrawable != null) frameDrawable!!.intrinsicWidth else 0) - paddingRight - drawableRightWidth
-        buttonTop =
-            (height - (if (frameDrawable != null) frameDrawable!!.intrinsicHeight else 0) + drawableTopHeight - drawableBottomHeight) / 2
-        val buttonRight = buttonLeft + if (frameDrawable != null) frameDrawable!!.intrinsicWidth else 0
-        val buttonBottom = buttonTop + if (frameDrawable != null) frameDrawable!!.intrinsicHeight else 0
-        buttonRectF.set(buttonLeft.toFloat(), buttonTop.toFloat(), buttonRight.toFloat(), buttonBottom.toFloat())
-    }
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
+
+        //自定义控件的宽高
+        val availableWidth = right - left
+        val availableHeight = bottom - top
+        println("!!!!!View的宽$availableWidth  高$availableHeight")
+
+        val mFrameWidth = frameDrawable!!.intrinsicWidth
+        val mFrameHeight = frameDrawable!!.intrinsicHeight
+        println("!!!!!框架图片的宽$mFrameWidth  高$mFrameHeight")
+
 
         // 保存图层并全体偏移，让 paddingTop 和 paddingLeft 生效
         canvas.save()
@@ -177,6 +165,8 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
                 stateMaskDrawable!!.draw(canvas)
                 // 绘制状态图片按并应用遮罩效果
                 paint.xfermode = porterDuffMaskType
+                val matrix = Matrix()
+                matrix.postScale(2.0f, 2.0f)
                 canvas.drawBitmap(stateBitmap, tempSlideX.toFloat(), 0f, paint)
                 paint.xfermode = null
                 // 融合图层
@@ -372,58 +362,6 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         this.tempMinSlideX = -1 * (stateDrawable.intrinsicWidth - frameBitmap.intrinsicWidth)  // 初始化X轴最小值
         setSlideX(if (isChecked) tempMinSlideX else tempMaxSlideX)  // 根据选中状态初始化默认坐标
 
-        requestLayout()
-    }
-
-    /**
-     * 设置图片
-     *
-     * @param frameDrawableResId     框架图片 ID
-     * @param stateDrawableResId     状态图片 ID
-     * @param stateMaskDrawableResId 状态遮罩图片 ID
-     * @param sliderDrawableResId    滑块图片 ID
-     */
-    fun setDrawableResIds(
-        frameDrawableResId: Int,
-        stateDrawableResId: Int,
-        stateMaskDrawableResId: Int,
-        sliderDrawableResId: Int
-    ) {
-        if (resources != null) {
-            setDrawables(
-                resources.getDrawable(frameDrawableResId),
-                resources.getDrawable(stateDrawableResId),
-                resources.getDrawable(stateMaskDrawableResId),
-                resources.getDrawable(sliderDrawableResId)
-            )
-        }
-    }
-
-    /**
-     * 设置动画持续时间
-     *
-     * @param duration 动画持续时间
-     */
-    fun setDuration(duration: Int) {
-        this.duration = duration
-    }
-
-    /**
-     * 设置有效距离比例
-     *
-     * @param minChangeDistanceScale 有效距离比例，例如按钮宽度为 100，比例为 0.3，那么只有当滑动距离大于等于 (100*0.3) 才会切换状态，否则就回滚
-     */
-    fun setMinChangeDistanceScale(minChangeDistanceScale: Float) {
-        this.minChangeDistanceScale = minChangeDistanceScale
-    }
-
-    /**
-     * 设置按钮和文本之间的间距
-     *
-     * @param withTextInterval 按钮和文本之间的间距，当有文本的时候此参数才能派上用场
-     */
-    fun setWithTextInterval(withTextInterval: Int) {
-        this.withTextInterval = withTextInterval
         requestLayout()
     }
 

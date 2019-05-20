@@ -49,8 +49,8 @@
                 app:switch_stateDrawable="@mipmap/switch_use_state"
                 app:switch_stateMaskDrawable="@mipmap/switch_state_mask"
                 app:switch_sliderDrawable="@mipmap/switch_use_slider"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_width="50dp"
+                android:layout_height="21dp"/>
 
         <com.kotlin.widget.widget.SwitchButton
                 android:layout_marginLeft="20dp"
