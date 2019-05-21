@@ -96,6 +96,8 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
 
     }
 
+    val setfff = 0.8f
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         // 计算宽度
         var measureWidth: Int
@@ -142,6 +144,29 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         setMeasuredDimension(measureWidth, measureHeight)
     }
 
+    /**
+     * 按比例缩放图片
+     *
+     * @param origin 原图
+     * @param ratio  比例
+     * @return 新的bitmap
+     */
+    private fun scaleBitmap(origin: Bitmap?, ratio: Float): Bitmap? {
+        if (origin == null) {
+            return null
+        }
+        val width = origin.width
+        val height = origin.height
+        val matrix = Matrix()
+        matrix.preScale(ratio, ratio)
+        val newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false)
+        if (newBM == origin) {
+            return newBM
+        }
+        origin.recycle()
+        return newBM
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -155,27 +180,47 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         val mFrameHeight = frameDrawable!!.intrinsicHeight
         info { "----框架图片的宽$mFrameWidth  高$mFrameHeight" }
 
+        info { }
+
+//        val fromDrawable = getBitmapFromDrawable(frameDrawable)
+//        val l = scaleBitmap(fromDrawable, 0.6f)
+
 
         // 保存图层并全体偏移，让 paddingTop 和 paddingLeft 生效
         canvas.save()
         canvas.translate(buttonLeft.toFloat(), buttonTop.toFloat())
+
+//        stateMaskBitmap = newBM2
+
+        stateMaskDrawable = BitmapDrawable(newBM2)
+        frameDrawable = BitmapDrawable(newBM3)
+
 
         // 绘制状态层
         if (stateDrawable != null && stateMaskDrawable != null) {
             val stateBitmap = getBitmapFromDrawable(stateDrawable)
             if (stateMaskDrawable != null && stateBitmap != null && !stateBitmap.isRecycled) {
                 // 保存并创建一个新的透明层，如果不这样做的话，画出来的背景会是黑的
-                val src = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), paint, Canvas.ALL_SAVE_FLAG)
+//                val src = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), paint, Canvas.ALL_SAVE_FLAG)
                 // 绘制遮罩层
+
+
                 stateMaskDrawable!!.draw(canvas)
+//                canvas.drawBitmap(stateMaskBitmap, matrix1, paint)
                 // 绘制状态图片按并应用遮罩效果
                 paint.xfermode = porterDuffMaskType
+
                 val matrix = Matrix()
-                matrix.postScale(2.0f, 2.0f)
-                canvas.drawBitmap(stateBitmap, tempSlideX.toFloat(), 0f, paint)
+                matrix.postScale(setfff, setfff)
+
+                val newBM = Bitmap.createBitmap(stateBitmap, 0, 0, stateBitmap.width, stateBitmap.height, matrix, false)
+
+
+                canvas.drawBitmap(newBM, tempSlideX.toFloat(), 0f, paint)
+
                 paint.xfermode = null
                 // 融合图层
-                canvas.restoreToCount(src)
+//                canvas.restoreToCount(src)
             }
         }
 
@@ -188,7 +233,18 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         if (sliderDrawable != null) {
             val sliderBitmap = getBitmapFromDrawable(sliderDrawable)
             if (sliderBitmap != null && !sliderBitmap.isRecycled) {
-                canvas.drawBitmap(sliderBitmap, tempSlideX.toFloat(), 0f, paint)
+
+
+                val matrix = Matrix()
+                matrix.postScale(setfff, setfff)
+
+                val newBM1 =
+                    Bitmap.createBitmap(sliderBitmap, 0, 0, sliderBitmap.width, sliderBitmap.height, matrix, false)
+
+
+//                canvas.drawBitmap(sliderBitmap, matrix, paint)
+
+                canvas.drawBitmap(newBM1, tempSlideX.toFloat(), 0f, paint)
             }
         }
 
@@ -244,7 +300,6 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
 
             MotionEvent.ACTION_UP -> {
                 isClickable = true
-
                 // 结尾滑动操作
                 if (touchMode == TOUCH_MODE_DRAGGING) { // 这是滑动操作
                     touchMode = TOUCH_MODE_IDLE
