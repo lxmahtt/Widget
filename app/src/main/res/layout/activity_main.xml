@@ -43,14 +43,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal">
+
         <com.kotlin.widget.widget.SwitchButtonDrawable
                 android:layout_marginLeft="20dp"
-                app:switch_frameDrawable="@mipmap/switch_frame"
+                app:switch_frameDrawable="@mipmap/switch_use_frame"
                 app:switch_stateDrawable="@mipmap/switch_use_state"
-                app:switch_stateMaskDrawable="@mipmap/switch_state_mask"
+                app:switch_stateMaskDrawable="@mipmap/switch_use_state_mask"
                 app:switch_sliderDrawable="@mipmap/switch_use_slider"
-                android:layout_width="50dp"
-                android:layout_height="21dp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         <com.kotlin.widget.widget.SwitchButton
                 android:layout_marginLeft="20dp"

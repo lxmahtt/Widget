@@ -17,10 +17,12 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.CompoundButton
 import android.widget.Scroller
 import com.kotlin.widget.R
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
 
 class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    CompoundButton(context, attrs, defStyle) {
+    CompoundButton(context, attrs, defStyle), AnkoLogger {
 
     companion object {
         private const val TOUCH_MODE_IDLE = 0
@@ -80,9 +82,9 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
             }
         }
         if (frameDrawable == null || stateDrawable == null || stateMaskDrawable == null || sliderDrawable == null) {
-            frameDrawable = context.resources.getDrawable(R.mipmap.switch_frame)
+            frameDrawable = context.resources.getDrawable(R.mipmap.switch_use_frame)
             stateDrawable = context.resources.getDrawable(R.drawable.selector_switch_state)
-            stateMaskDrawable = context.resources.getDrawable(R.mipmap.switch_state_mask)
+            stateMaskDrawable = context.resources.getDrawable(R.mipmap.switch_use_state_mask)
             sliderDrawable = context.resources.getDrawable(R.drawable.selector_switch_slider)
         }
         setDrawables(frameDrawable, stateDrawable, stateMaskDrawable, sliderDrawable)
@@ -126,12 +128,15 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
+
+        info { "----measureWidth $measureWidth 系统measuredWidth $measuredWidth" }
+        info { "----measureHeight $measureHeight 系统measureHeight $measureHeight" }
         if (measureWidth < measuredWidth) {
             measureWidth = measuredWidth
         }
 
         if (measureHeight < measuredHeight) {
-            measureHeight = measuredHeight
+            measureHeight = measureHeight
         }
 
         setMeasuredDimension(measureWidth, measureHeight)
@@ -140,15 +145,15 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-
         //自定义控件的宽高
         val availableWidth = right - left
         val availableHeight = bottom - top
-        println("!!!!!View的宽$availableWidth  高$availableHeight")
+        info { "----View的宽$availableWidth  高$availableHeight" }
+
 
         val mFrameWidth = frameDrawable!!.intrinsicWidth
         val mFrameHeight = frameDrawable!!.intrinsicHeight
-        println("!!!!!框架图片的宽$mFrameWidth  高$mFrameHeight")
+        info { "----框架图片的宽$mFrameWidth  高$mFrameHeight" }
 
 
         // 保存图层并全体偏移，让 paddingTop 和 paddingLeft 生效
