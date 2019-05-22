@@ -12,13 +12,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mSwitchButtonDrawable
+        mSwitchButtonDrawable.setOnCheckedChangeListener { _, mChecked ->
+            if (mChecked) {
+
+            }
+
+        }
         mSwitchButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
 
             }
         }
         mBtnCanvas.setOnClickListener(this)
+
+
     }
 
     override fun onClick(v: View) {

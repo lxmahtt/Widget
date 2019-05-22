@@ -8,9 +8,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.DrawableContainer
 import android.os.Build
-import android.text.TextUtils
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -18,18 +16,14 @@ import android.widget.CompoundButton
 import android.widget.Scroller
 import com.kotlin.widget.R
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 
-class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-        CompoundButton(context, attrs, defStyle), AnkoLogger {
-
+class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : CompoundButton(context, attrs, defStyle), AnkoLogger {
     companion object {
-        private const val TOUCH_MODE_IDLE = 0
-        private const val TOUCH_MODE_DOWN = 1
-        private const val TOUCH_MODE_DRAGGING = 2
+        private const val TOUCH_MODE_IDLE = 0       //抬起
+        private const val TOUCH_MODE_DOWN = 1       //按下
+        private const val TOUCH_MODE_DRAGGING = 2   //拖动
     }
 
-    private var mWithTextInterval: Int = 0   // 文字和按钮之间的间距
     private var mFrameDrawable: Drawable? = null // 框架层图片
     private var mStateDrawable: Drawable? = null    // 状态图片
     private var mStateMaskDrawable: Drawable? = null    // 状态遮罩图片
@@ -46,19 +40,14 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     private val mTouchSlop: Int
     private var mTouchX: Float = 0.toFloat()   //记录上次触摸坐标，用于计算滑动距离
     private var mMinChangeDistanceScale = 0.2f   //有效距离比例，例如按钮宽度为 100，比例为 0.3，那么只有当滑动距离大于等于 (100*0.3) 才会切换状态，否则就回滚
-    private val mPaint: Paint    //画笔，用来绘制遮罩效果
+    private val mPaint: Paint = Paint()    //画笔，用来绘制遮罩效果
     private val mButtonRectF: RectF   //按钮的位置
     private val mSwitchScroller: SwitchScroller?  //切换滚动器，用于实现平滑滚动效果
-    private val mPorterDuffMaskType: PorterDuffXfermode//遮罩类型
+    private val mPorterDuffMaskType: PorterDuffXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)//遮罩类型  Alpha混合:新创建的图层和就图层重合后，只显示重合部分
 
     init {
-        gravity = Gravity.CENTER_VERTICAL
-        mPaint = Paint()
-        mPaint.color = Color.RED
-        mPorterDuffMaskType = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         mSwitchScroller = SwitchScroller(getContext(), AccelerateDecelerateInterpolator())
         mButtonRectF = RectF()
-        mWithTextInterval = (16 * context.resources.displayMetrics.density + 0.5).toInt()
 
         var frameDrawable: Drawable? = null
         var stateDrawable: Drawable? = null
@@ -67,12 +56,6 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         if (attrs != null) {
             val typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.SwitchButtonDrawable)
             if (typedArray != null) {
-                mWithTextInterval =
-                        typedArray.getDimension(
-                                R.styleable.SwitchButtonDrawable_switch_withTextInterval,
-                                mWithTextInterval.toFloat()
-                        )
-                                .toInt()
                 frameDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_frameDrawable)
                 stateDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateDrawable)
                 stateMaskDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateMaskDrawable)
@@ -92,7 +75,6 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         mTouchSlop = config.scaledTouchSlop
         isChecked = isChecked
         isClickable = true //设置允许点击，当用户点击在按钮其它区域的时候就会切换状态
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -103,12 +85,12 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         val widthSpecSize = MeasureSpec.getSize(widthMeasureSpec)
         measureWidth = when (widthSpecMode) {
             MeasureSpec.AT_MOST   // 如果 widthSize 是当前视图可使用的最大宽度
-            -> compoundPaddingLeft + compoundPaddingRight
+            -> mFrameDrawable!!.intrinsicWidth
             MeasureSpec.EXACTLY   // 如果 widthSize 是当前视图可使用的绝对宽度
             -> widthSpecSize
             MeasureSpec.UNSPECIFIED   // 如果 widthSize 对当前视图宽度的计算没有任何参考意义
-            -> compoundPaddingLeft + compoundPaddingRight
-            else -> compoundPaddingLeft + compoundPaddingRight
+            -> widthSpecSize
+            else -> mFrameDrawable!!.intrinsicWidth
         }
 
         // 计算高度
@@ -117,19 +99,16 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         val heightSpecSize = MeasureSpec.getSize(heightMeasureSpec)
         measureHeight = when (heightSpecMode) {
             MeasureSpec.AT_MOST   // 如果 heightSize 是当前视图可使用的最大宽度
-            -> (if (mFrameDrawable != null) mFrameDrawable!!.intrinsicHeight else 0) + compoundPaddingTop + compoundPaddingBottom
+            -> mFrameDrawable!!.intrinsicHeight
             MeasureSpec.EXACTLY//如果heightSize是当前视图可使用的绝对宽度
             -> heightSpecSize
             MeasureSpec.UNSPECIFIED   // 如果 heightSize 对当前视图宽度的计算没有任何参考意义
-            -> (if (mFrameDrawable != null) mFrameDrawable!!.intrinsicHeight else 0) + compoundPaddingTop + compoundPaddingBottom
-            else -> (if (mFrameDrawable != null) mFrameDrawable!!.intrinsicHeight else 0) + compoundPaddingTop + compoundPaddingBottom
+            -> heightSpecSize
+            else -> mFrameDrawable!!.intrinsicHeight
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-
-        info { "----measureWidth $measureWidth 系统measuredWidth $measuredWidth" }
-        info { "----measureHeight $measureHeight 系统measureHeight $measureHeight" }
         if (measureWidth < measuredWidth) {
             measureWidth = measuredWidth
         }
@@ -143,18 +122,6 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
-        //自定义控件的宽高
-        val availableWidth = right - left
-        val availableHeight = bottom - top
-        info { "----View的宽$availableWidth  高$availableHeight" }
-
-
-        val mFrameWidth = mFrameDrawable!!.intrinsicWidth
-        val mFrameHeight = mFrameDrawable!!.intrinsicHeight
-        info { "----框架图片的宽$mFrameWidth  高$mFrameHeight" }
-
-
         // 保存图层并全体偏移，让 paddingTop 和 paddingLeft 生效
         canvas.save()
         canvas.translate(mButtonLeft.toFloat(), mButtonTop.toFloat())
@@ -312,27 +279,15 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
-    override fun getCompoundPaddingRight(): Int {
-        // 重写此方法实现让文本提前换行，避免当文本过长时被按钮给盖住
-        var padding = super.getCompoundPaddingRight() + if (mFrameDrawable != null) mFrameDrawable!!.intrinsicWidth else 0
-        if (!TextUtils.isEmpty(text)) {
-            padding += mWithTextInterval
-        }
-        return padding
-    }
-
     /**
      * 设置图片
      *
-     * @param frameBitmap       框架图片
+     * @param frameDrawable       框架图片
      * @param stateDrawable     状态图片
      * @param stateMaskDrawable 状态遮罩图片
      * @param sliderDrawable    滑块图片
      */
-    private fun setDrawables(frameDrawable: Drawable?,
-                             stateDrawable: Drawable?,
-                             stateMaskDrawable: Drawable?,
-                             sliderDrawable: Drawable?) {
+    private fun setDrawables(frameDrawable: Drawable?, stateDrawable: Drawable?, stateMaskDrawable: Drawable?, sliderDrawable: Drawable?) {
         if (frameDrawable == null || stateDrawable == null || stateMaskDrawable == null || sliderDrawable == null) {
             throw IllegalArgumentException("ALL NULL")
         }
@@ -346,19 +301,9 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         mFrameDrawable!!.callback = this
         mStateDrawable!!.setBounds(0, 0, mStateDrawable!!.intrinsicWidth, mStateDrawable!!.intrinsicHeight)
         mStateDrawable!!.callback = this
-        mStateMaskDrawable!!.setBounds(
-                0,
-                0,
-                mStateMaskDrawable!!.intrinsicWidth,
-                mStateMaskDrawable!!.intrinsicHeight
-        )
+        mStateMaskDrawable!!.setBounds(0, 0, mStateMaskDrawable!!.intrinsicWidth, mStateMaskDrawable!!.intrinsicHeight)
         mStateMaskDrawable!!.callback = this
-        mSliderDrawable!!.setBounds(
-                0,
-                0,
-                mSliderDrawable!!.intrinsicWidth,
-                mSliderDrawable!!.intrinsicHeight
-        )
+        mSliderDrawable!!.setBounds(0, 0, mSliderDrawable!!.intrinsicWidth, mSliderDrawable!!.intrinsicHeight)
         mSliderDrawable!!.callback = this
 
         mTempMinSlideX = -1 * (stateDrawable.intrinsicWidth - frameDrawable.intrinsicWidth)  // 初始化X轴最小值
@@ -369,7 +314,6 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
 
     /**
      * 设置X轴坐标
-     *
      * @param newSlideX 新的 X 轴坐标
      * @return Xz轴坐标增加的值，例如 newSlideX 等于 100，旧的X轴坐标为 49，那么返回值就是 51
      */
@@ -399,25 +343,15 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     /**
      * 切换滚动器，用于实现滚动动画
      */
-    private inner class SwitchScroller internal constructor(
-            context: Context,
-            interpolator: android.view.animation.Interpolator
-    ) : Runnable {
+    private inner class SwitchScroller internal constructor(context: Context, interpolator: android.view.animation.Interpolator) : Runnable {
         private val scroller: Scroller = Scroller(context, interpolator)
 
         /**
          * 开始滚动
-         *
          * @param checked 是否选中
          */
         internal fun startScroll(checked: Boolean) {
-            scroller.startScroll(
-                    mTempSlideX,
-                    0,
-                    (if (checked) mTempMinSlideX else mTempMaxSlideX) - mTempSlideX,
-                    0,
-                    mDuration
-            )
+            scroller.startScroll(mTempSlideX, 0, (if (checked) mTempMinSlideX else mTempMaxSlideX) - mTempSlideX, 0, mDuration)
             post(this)
         }
 
