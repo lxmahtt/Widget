@@ -10,7 +10,6 @@ import android.os.Handler
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.View
-import android.widget.RemoteViews.RemoteView
 import com.kotlin.widget.R
 import java.util.*
 
@@ -19,9 +18,9 @@ import java.util.*
  * 换图，表盘，时针，分针，秒针图片
  */
 class Clock @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyle: Int = 0) : View(context, attrs, defStyle) {
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyle: Int = 0) : View(context, attrs, defStyle) {
 
     //当前时间
     private var mCalendar: Calendar? = null
@@ -106,7 +105,7 @@ class Clock @JvmOverloads constructor(
             filter.addAction(Intent.ACTION_TIME_CHANGED)
             filter.addAction(Intent.ACTION_TIMEZONE_CHANGED)
             context.registerReceiver(mIntentReceiver, filter, null,
-                mHandler)
+                    mHandler)
         }
         mCalendar = Calendar.getInstance()
         onTimeChanged()
@@ -188,7 +187,7 @@ class Clock @JvmOverloads constructor(
             scaled = true
             //获取画布缩放比例
             val scale = Math.min(availableWidth.toFloat() / mDialWidth.toFloat(),
-                availableHeight.toFloat() / mDialHeight.toFloat())
+                    availableHeight.toFloat() / mDialHeight.toFloat())
             canvas.save()
             canvas.scale(scale, scale, x.toFloat(), y.toFloat())
         }
@@ -256,7 +255,7 @@ class Clock @JvmOverloads constructor(
     private fun updateContentDescription() {
         val flags = DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_24HOUR
         val contentDescription = DateUtils.formatDateTime(context,
-            System.currentTimeMillis(), flags)
+                System.currentTimeMillis(), flags)
         setContentDescription(contentDescription)
     }
 }

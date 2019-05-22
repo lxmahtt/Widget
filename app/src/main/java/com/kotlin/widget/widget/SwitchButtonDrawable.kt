@@ -22,7 +22,7 @@ import org.jetbrains.anko.info
 
 
 class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
-    CompoundButton(context, attrs, defStyle), AnkoLogger {
+        CompoundButton(context, attrs, defStyle), AnkoLogger {
 
     companion object {
         private const val TOUCH_MODE_IDLE = 0
@@ -69,11 +69,11 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
             val typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.SwitchButtonDrawable)
             if (typedArray != null) {
                 withTextInterval =
-                    typedArray.getDimension(
-                        R.styleable.SwitchButtonDrawable_switch_withTextInterval,
-                        withTextInterval.toFloat()
-                    )
-                        .toInt()
+                        typedArray.getDimension(
+                                R.styleable.SwitchButtonDrawable_switch_withTextInterval,
+                                withTextInterval.toFloat()
+                        )
+                                .toInt()
                 frameDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_frameDrawable)
                 stateDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateDrawable)
                 stateMaskDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateMaskDrawable)
@@ -331,10 +331,10 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
      * @param sliderDrawable    滑块图片
      */
     private fun setDrawables(
-        frameBitmap: Drawable?,
-        stateDrawable: Drawable?,
-        stateMaskDrawable: Drawable?,
-        sliderDrawable: Drawable?
+            frameBitmap: Drawable?,
+            stateDrawable: Drawable?,
+            stateMaskDrawable: Drawable?,
+            sliderDrawable: Drawable?
     ) {
         if (frameBitmap == null || stateDrawable == null || stateMaskDrawable == null || sliderDrawable == null) {
             throw IllegalArgumentException("ALL NULL")
@@ -350,17 +350,17 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         this.stateDrawable!!.setBounds(0, 0, this.stateDrawable!!.intrinsicWidth, this.stateDrawable!!.intrinsicHeight)
         this.stateDrawable!!.callback = this
         this.stateMaskDrawable!!.setBounds(
-            0,
-            0,
-            this.stateMaskDrawable!!.intrinsicWidth,
-            this.stateMaskDrawable!!.intrinsicHeight
+                0,
+                0,
+                this.stateMaskDrawable!!.intrinsicWidth,
+                this.stateMaskDrawable!!.intrinsicHeight
         )
         this.stateMaskDrawable!!.callback = this
         this.sliderDrawable!!.setBounds(
-            0,
-            0,
-            this.sliderDrawable!!.intrinsicWidth,
-            this.sliderDrawable!!.intrinsicHeight
+                0,
+                0,
+                this.sliderDrawable!!.intrinsicWidth,
+                this.sliderDrawable!!.intrinsicHeight
         )
         this.sliderDrawable!!.callback = this
 
@@ -403,8 +403,8 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
      * 切换滚动器，用于实现滚动动画
      */
     private inner class SwitchScroller internal constructor(
-        context: Context,
-        interpolator: android.view.animation.Interpolator
+            context: Context,
+            interpolator: android.view.animation.Interpolator
     ) : Runnable {
         private val scroller: Scroller = Scroller(context, interpolator)
 
@@ -415,11 +415,11 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
          */
         internal fun startScroll(checked: Boolean) {
             scroller.startScroll(
-                tempSlideX,
-                0,
-                (if (checked) tempMinSlideX else tempMaxSlideX) - tempSlideX,
-                0,
-                duration
+                    tempSlideX,
+                    0,
+                    (if (checked) tempMinSlideX else tempMaxSlideX) - tempSlideX,
+                    0,
+                    duration
             )
             post(this)
         }

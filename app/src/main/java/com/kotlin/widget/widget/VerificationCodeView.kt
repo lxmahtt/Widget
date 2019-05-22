@@ -17,7 +17,7 @@ import android.widget.TextView
 import com.kotlin.widget.R
 
 class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) : LinearLayout(mContext, attrs),
-    TextWatcher, View.OnKeyListener, View.OnFocusChangeListener {
+        TextWatcher, View.OnKeyListener, View.OnFocusChangeListener {
     private var endTime: Long = 0
     var onCodeFinishListener: OnCodeFinishListener? = null
 
@@ -111,7 +111,7 @@ class VerificationCodeView(private val mContext: Context, attrs: AttributeSet) :
         when (mEtInputType) {
             VCInputType.NUMBER -> editText.inputType = InputType.TYPE_CLASS_NUMBER
             VCInputType.NUMBER_PASSWORD -> editText.inputType =
-                InputType.TYPE_NUMBER_VARIATION_PASSWORD
+                    InputType.TYPE_NUMBER_VARIATION_PASSWORD
             VCInputType.TEXT -> editText.inputType = InputType.TYPE_CLASS_TEXT
             VCInputType.TEXT_PASSWORD -> editText.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
             else -> editText.inputType = InputType.TYPE_CLASS_NUMBER

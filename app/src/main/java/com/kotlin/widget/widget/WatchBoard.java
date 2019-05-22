@@ -2,10 +2,16 @@ package com.kotlin.widget.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
 import com.kotlin.widget.R;
 import com.kotlin.widget.utils.SizeUtils;
 

@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Checkable;
+
 import com.kotlin.widget.R;
 
 
@@ -538,6 +539,7 @@ public class SwitchButton extends View implements Checkable {
      *
      */
     private void broadcastEvent() {
+        // LI TODO:点击的事件广播后，监听方法
         if (onCheckedChangeListener != null) {
             isEventBroadcast = true;
             onCheckedChangeListener.onCheckedChanged(this, isChecked());
@@ -780,6 +782,7 @@ public class SwitchButton extends View implements Checkable {
         onCheckedChangeListener = l;
     }
 
+    // LI TODO:事件监听
     public interface OnCheckedChangeListener {
         void onCheckedChanged(SwitchButton view, boolean isChecked);
     }
