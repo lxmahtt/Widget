@@ -11,6 +11,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mBtnCanvas"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_5a85fc_radius"
+            android:text="Canvas"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <com.kotlin.widget.widget.Clock
@@ -45,7 +62,7 @@
         android:orientation="horizontal">
 
         <com.kotlin.widget.widget.SwitchButtonDrawable
-            android:id="@+id/switch_button_drawable"
+            android:id="@+id/mSwitchButtonDrawable"
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
@@ -55,7 +72,7 @@
             app:switch_stateMaskDrawable="@mipmap/switch_use_state_mask" />
 
         <com.kotlin.widget.widget.SwitchButton
-            android:id="@+id/switch_button"
+            android:id="@+id/mSwitchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp" />
