@@ -20,7 +20,6 @@ import com.kotlin.widget.R
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-
 class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
         CompoundButton(context, attrs, defStyle), AnkoLogger {
 
