@@ -63,8 +63,8 @@
 
         <com.kotlin.widget.widget.SwitchButtonDrawable
             android:id="@+id/mSwitchButtonDrawable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
             android:layout_marginLeft="20dp"
             app:switch_frameDrawable="@mipmap/switch_use_frame"
             app:switch_sliderDrawable="@mipmap/switch_use_slider"
