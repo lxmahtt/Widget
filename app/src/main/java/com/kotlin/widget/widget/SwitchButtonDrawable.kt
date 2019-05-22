@@ -271,8 +271,10 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     }
 
     override fun setChecked(checked: Boolean) {
+        //如果图层的checked和现在的checked不同
         val changed = checked != isChecked
         super.setChecked(checked)
+        //如果不同，滑动
         if (changed) {
             if (width > 0 && mSwitchScroller != null) {   // 如果已经绘制完成
                 mSwitchScroller.startScroll(checked)
