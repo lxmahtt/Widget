@@ -28,6 +28,8 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     private var mStateDrawable: Drawable? = null    // 状态图片
     private var mStateMaskDrawable: Drawable? = null    // 状态遮罩图片
     private var mSliderDrawable: Drawable? = null    // 滑块图片
+    //滑块默认是在左边，默认的CompoundButton是checked
+    private var mSwitchToLeft: Boolean = true
 
     private var mButtonLeft: Int = 0  // 按钮在画布上的X坐标
     private var mButtonTop: Int = 0  // 按钮在画布上的Y坐标
@@ -60,6 +62,7 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
                 stateDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateDrawable)
                 stateMaskDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_stateMaskDrawable)
                 sliderDrawable = typedArray.getDrawable(R.styleable.SwitchButtonDrawable_switch_sliderDrawable)
+                mSwitchToLeft = typedArray.getBoolean(R.styleable.SwitchButtonDrawable_switch_sliderToLeft, true)
                 typedArray.recycle()
             }
         }
@@ -73,7 +76,7 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
 
         val config = ViewConfiguration.get(getContext())
         mTouchSlop = config.scaledTouchSlop
-        isChecked = isChecked
+        isChecked = mSwitchToLeft
         isClickable = true //设置允许点击，当用户点击在按钮其它区域的时候就会切换状态
     }
 

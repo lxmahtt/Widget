@@ -93,5 +93,6 @@
         <attr name="switch_stateDrawable" format="reference|color" />
         <attr name="switch_stateMaskDrawable" format="reference|color" />
         <attr name="switch_sliderDrawable" format="reference|color" />
+        <attr name="switch_sliderToLeft" format="reference|boolean" />
     </declare-styleable>
 </resources>
