@@ -10,6 +10,7 @@ import android.graphics.drawable.DrawableContainer
 import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.CompoundButton
@@ -35,7 +36,7 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     private var mButtonTop: Int = 0  // 按钮在画布上的Y坐标
     private var mTempSlideX = 0 // X 轴当前坐标，用于动态绘制图片显示坐标，实现滑动效果
     private var mTempMinSlideX = 0  // X 轴最小坐标，用于防止往左边滑动时超出范围
-    private val mTempMaxSlideX = 0  // X 轴最大坐标，用于防止往右边滑动时超出范围
+    private val mTempMaxSlideX = 0  // X 轴最大坐标，用于防止往右边滑动时超出范围，最大范围就是0。
     private var mTempTotalSlideDistance: Int = 0   //滑动距离，用于记录每次滑动的距离，在滑动结束后根据距离判断是否切换状态或者回滚
     private var mDuration = 200 //动画持续时间
     private var mTouchMode: Int = 0 //触摸模式，用来在处理滑动事件的时候区分操作
@@ -47,6 +48,8 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     private val mSwitchScroller: SwitchScroller?  //切换滚动器，用于实现平滑滚动效果
 
     init {
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+
         mSwitchScroller = SwitchScroller(getContext(), AccelerateDecelerateInterpolator())
         mButtonRectF = RectF()
 
@@ -312,6 +315,7 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         mStateMaskDrawable = stateMaskDrawable
         mSliderDrawable = sliderDrawable
 
+        //如果客户端要求支持动画Drawable,将一个Callback实例绑定到当前
         mFrameDrawable!!.setBounds(0, 0, mFrameDrawable!!.intrinsicWidth, mFrameDrawable!!.intrinsicHeight)
         mFrameDrawable!!.callback = this
         mStateDrawable!!.setBounds(0, 0, mStateDrawable!!.intrinsicWidth, mStateDrawable!!.intrinsicHeight)
@@ -321,9 +325,11 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         mSliderDrawable!!.setBounds(0, 0, mSliderDrawable!!.intrinsicWidth, mSliderDrawable!!.intrinsicHeight)
         mSliderDrawable!!.callback = this
 
+        //长图减去遮罩层
         mTempMinSlideX = -1 * (stateDrawable.intrinsicWidth - frameDrawable.intrinsicWidth)  // 初始化X轴最小值
-        setSlideX(if (isChecked) mTempMinSlideX else mTempMaxSlideX)  // 根据选中状态初始化默认坐标
+        setSlideX(if (isChecked) mTempMinSlideX else mTempMaxSlideX)  // 根据选中状态初始化默认坐标，如果是选中状态，滑动到min，否则，就直接是0。
 
+        //标记后，测量、布局、绘制。
         requestLayout()
     }
 
