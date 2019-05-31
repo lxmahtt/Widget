@@ -45,7 +45,6 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
     private val mPaint: Paint = Paint()    //画笔，用来绘制遮罩效果
     private val mButtonRectF: RectF   //按钮的位置
     private val mSwitchScroller: SwitchScroller?  //切换滚动器，用于实现平滑滚动效果
-    private val mPorterDuffMaskType: PorterDuffXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)//遮罩类型  Alpha混合:新创建的图层和就图层重合后，只显示重合部分
 
     init {
         mSwitchScroller = SwitchScroller(getContext(), AccelerateDecelerateInterpolator())
@@ -68,9 +67,9 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         }
         if (frameDrawable == null || stateDrawable == null || stateMaskDrawable == null || sliderDrawable == null) {
             frameDrawable = context.resources.getDrawable(R.mipmap.switch_use_frame)
-            stateDrawable = context.resources.getDrawable(R.drawable.selector_switch_state)
+            stateDrawable = context.resources.getDrawable(R.mipmap.switch_use_state)
             stateMaskDrawable = context.resources.getDrawable(R.mipmap.switch_use_state_mask)
-            sliderDrawable = context.resources.getDrawable(R.drawable.selector_switch_slider)
+            sliderDrawable = context.resources.getDrawable(R.mipmap.switch_use_slider)
         }
         setDrawables(frameDrawable, stateDrawable, stateMaskDrawable, sliderDrawable)
 
@@ -123,6 +122,7 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
         setMeasuredDimension(measureWidth, measureHeight)
     }
 
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         // 保存图层并全体偏移，让 paddingTop 和 paddingLeft 生效
@@ -134,17 +134,24 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
             val stateBitmap = getBitmapFromDrawable(mStateDrawable)
             if (mStateMaskDrawable != null && stateBitmap != null && !stateBitmap.isRecycled) {
                 // 保存并创建一个新的透明层，如果不这样做的话，画出来的背景会是黑的
-                val src = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), mPaint, Canvas.ALL_SAVE_FLAG)
+                val layerId = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), mPaint, Canvas.ALL_SAVE_FLAG)
+
                 // 绘制遮罩层
                 mStateMaskDrawable!!.draw(canvas)
+
                 // 绘制状态图片按并应用遮罩效果
-                mPaint.xfermode = mPorterDuffMaskType
-                val matrix = Matrix()
-                matrix.postScale(2.0f, 2.0f)
+                mPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)//遮罩类型  Alpha混合:新创建的图层和就图层重合后，只显示重合部分
+
+                //画显示的图片
+                //mStateDrawable!!.setBounds(mTempSlideX, 0, mTempSlideX + mStateDrawable!!.intrinsicWidth, mStateDrawable!!.intrinsicHeight)
+                //mStateDrawable!!.draw(canvas)
+
                 canvas.drawBitmap(stateBitmap, mTempSlideX.toFloat(), 0f, mPaint)
+
+                //将画笔去除Xfermode
                 mPaint.xfermode = null
                 // 融合图层
-                canvas.restoreToCount(src)
+                canvas.restoreToCount(layerId)
             }
         }
 
@@ -158,6 +165,9 @@ class SwitchButtonDrawable @JvmOverloads constructor(context: Context, attrs: At
             val sliderBitmap = getBitmapFromDrawable(mSliderDrawable)
             if (sliderBitmap != null && !sliderBitmap.isRecycled) {
                 canvas.drawBitmap(sliderBitmap, mTempSlideX.toFloat(), 0f, mPaint)
+
+                //mSliderDrawable!!.setBounds(mTempSlideX, 0, mTempSlideX + mSliderDrawable!!.intrinsicWidth, mSliderDrawable!!.intrinsicHeight)
+                //mSliderDrawable!!.draw(canvas)
             }
         }
 
