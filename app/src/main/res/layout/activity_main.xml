@@ -85,6 +85,7 @@
     <com.kotlin.widget.widget.TagGroup
         android:id="@+id/tag_group"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:padding="15dp" />
 
