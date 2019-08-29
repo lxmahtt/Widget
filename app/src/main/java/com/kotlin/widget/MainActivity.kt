@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AnkoLogger {
         }
         mBtnCanvas.setOnClickListener(this)
 
-
+        val tags = arrayOf("测试", "测试", "测试", "测试", "测试", "测试", "测试", "测试")
+        tag_group.setTags(*tags)
     }
 
     override fun onClick(v: View) {
