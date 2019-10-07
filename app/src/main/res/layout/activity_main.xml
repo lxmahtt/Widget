@@ -28,7 +28,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.kotlin.widget.widget.Clock
             android:layout_width="150dp"
@@ -46,6 +47,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:vcv_et_bg="@drawable/et_verification_bg"
         app:vcv_et_cursor="@drawable/et_verification_cursor"
         app:vcv_et_inputType="number"
@@ -59,7 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.kotlin.widget.widget.SwitchButtonDrawable
             android:id="@+id/mSwitchButtonDrawable"
@@ -85,8 +88,45 @@
     <com.kotlin.widget.widget.TagGroup
         android:id="@+id/tag_group"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
-        android:padding="15dp" />
+        android:padding="15dp"
+        android:visibility="gone" />
 
+    <com.kotlin.widget.widget.ExpandableTextView
+        android:id="@+id/tv_no_click_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_no_click_title"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        app:duration="400"
+        app:expandText="查看更多"
+        app:maxExpandLines="6">
+
+        <TextView
+            android:id="@+id/id_source_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="内容超过6行折叠内容超过6行折叠内容超过6行折内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠"
+            android:textColor="#4c556e"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/id_expand_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="8dp"
+            android:text="查看更多"
+            android:textColor="#4c556e"
+            android:textSize="16sp" />
+    </com.kotlin.widget.widget.ExpandableTextView>
+
+    <com.kotlin.widget.widget.ExpandTextView
+        android:id="@+id/etv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="14sp"
+        android:text="内容超过6行折叠内容超过6行折叠内容超过6行折内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠叠内容超过6行折叠内容超过6行折叠内容超过6行折叠内容超过6行折叠" />
 </LinearLayout>

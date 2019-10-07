@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.kotlin.widget.ui.CanvasActivity
+import com.kotlin.widget.utils.UtilTools
 import com.kotlin.widget.widget.TagGroup
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.AnkoLogger
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AnkoLogger {
 
         }
 
-        tag_group.setOnTagChangeListener(object :TagGroup.OnTagChangeListener{
+        tag_group.setOnTagChangeListener(object : TagGroup.OnTagChangeListener {
             override fun onAppend(tagGroup: TagGroup?, tag: String?) {
 
             }
@@ -44,6 +45,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AnkoLogger {
             }
 
         })
+
+        etv.initWidth(UtilTools.getScreenWidth(this))
+        
+        etv.maxLines = 1
+        val content =
+            "中国共产党是中国工人阶级的先锋队，同时是中国人民和中华民族的同时是中国人民和中华民族的先锋队同时是中国人民和中华民族的先锋队同时是中国人民和中华民族的先锋队先锋队，是中国特色社会主义事业的领导核心，代表中国先进生产力的发展要求，代表中国先进文化的前进方向，代表中国最广大人民的根本利益。党的最高理想和最终目标是实现共产主义。"
+        etv.setCloseText(content)
+        println("+++++++++++++++${etv.lineCount}")
 
     }
 

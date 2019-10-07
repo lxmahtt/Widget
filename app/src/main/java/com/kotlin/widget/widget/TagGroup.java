@@ -56,11 +56,13 @@ public class TagGroup extends ViewGroup {
 
     /**
      * Indicates whether this TagGroup is set up to APPEND mode or DISPLAY mode. Default is false.
+     * 仅仅展示：STATE_NORMAL、可添加输入模式：STATE_INPUT，两种模式，根据attrs：atg_isAppendMode设置
      */
     private boolean isAppendMode;
 
     /**
      * The text to be displayed when the text of the INPUT tag is empty.
+     * 输入模式下的 hint，根据attrs：atg_inputHint设置
      */
     private CharSequence inputHint;
 
