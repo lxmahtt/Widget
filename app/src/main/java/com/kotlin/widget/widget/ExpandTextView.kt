@@ -25,8 +25,8 @@ class ExpandTextView : TextView {
     private var mMaxLines = 3// TextView最大行数
     private var SPAN_CLOSE: SpannableString? = null// 收起的文案(颜色处理)
     private var SPAN_EXPAND: SpannableString? = null// 展开的文案(颜色处理)
-    private val TEXT_EXPAND = "全部"
-    private var TEXT_CLOSE = "\n"
+    private val TEXT_EXPAND = "　展开"
+    private var TEXT_CLOSE = ""
 
     constructor(context: Context) : super(context) {
         initCloseEnd()
@@ -97,10 +97,10 @@ class ExpandTextView : TextView {
 
         // SDK >= 16 可以直接从xml属性获取最大行数
         var maxLines = 0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            maxLines = getMaxLines()
+        maxLines = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            getMaxLines()
         } else {
-            maxLines = mMaxLines
+            mMaxLines
         }
         var workingText = StringBuilder(originText!!).toString()
         if (maxLines != -1) {
@@ -138,23 +138,15 @@ class ExpandTextView : TextView {
 
     private fun setExpandText(text: String?) {
 
-        val lineEnd = createWorkingLayout(text).getLineEnd(0) - 6
+        val lineEnd = createWorkingLayout(text).getLineEnd(0) - 3
         var textSpan = ""
         for (index in 0..lineEnd) {
             textSpan = "${textSpan}\u3000"
         }
-        TEXT_CLOSE = "${TEXT_CLOSE}${textSpan}收起"
+        TEXT_CLOSE = "\n${textSpan}折叠"
         if (SPAN_EXPAND == null) {
             initExpandEnd()
         }
-        /*val layout1 = createWorkingLayout(text)
-        val layout2 = createWorkingLayout(text!! + TEXT_CLOSE)
-        // 展示全部原始内容时 如果 TEXT_CLOSE 需要换行才能显示完整，则直接将TEXT_CLOSE展示在下一行
-        if (layout2.lineCount > layout1.lineCount) {
-            setText(originText!! + "\n")
-        } else {
-            setText(originText)
-        }*/
         setText(originText)
         append(SPAN_EXPAND)
         movementMethod = LinkMovementMethod.getInstance()
