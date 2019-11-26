@@ -1,4 +1,4 @@
-package com.kotlin.widget.widget
+package com.daiketong.module_man_manager.mvp.ui.widget
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,12 +10,12 @@ import android.os.Handler
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.View
-import com.kotlin.widget.R
+import com.daiketong.module_man_manager.R
 import java.util.*
+
 
 /**
  * 有时针、分针、秒针的显示时钟
- * 换图，表盘，时针，分针，秒针图片
  */
 class Clock @JvmOverloads constructor(
         context: Context,
@@ -61,7 +61,7 @@ class Clock @JvmOverloads constructor(
         }
     }
 
-    //时区改变后的通知
+    //时区改变后的通知,注册广播
     private val mIntentReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             //时区改变
@@ -96,18 +96,19 @@ class Clock @JvmOverloads constructor(
         tickHandler!!.post(tickRunnable)
     }
 
+    //在onResume之后执行的onAttachedToWindow
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         if (!mAttached) {
             mAttached = true
             val filter = IntentFilter()
-            filter.addAction(Intent.ACTION_TIME_TICK)
-            filter.addAction(Intent.ACTION_TIME_CHANGED)
-            filter.addAction(Intent.ACTION_TIMEZONE_CHANGED)
-            context.registerReceiver(mIntentReceiver, filter, null,
-                    mHandler)
+            filter.addAction(Intent.ACTION_TIME_TICK)   //每分钟变化
+            filter.addAction(Intent.ACTION_TIME_CHANGED)    //设置了系统时区
+            filter.addAction(Intent.ACTION_TIMEZONE_CHANGED)    //设置了系统时区
+            context.registerReceiver(mIntentReceiver, filter, null, mHandler)
         }
         mCalendar = Calendar.getInstance()
+        //根据当前的时间去改变时间
         onTimeChanged()
     }
 
@@ -115,6 +116,8 @@ class Clock @JvmOverloads constructor(
         super.onDetachedFromWindow()
         if (mAttached) {
             context.unregisterReceiver(mIntentReceiver)
+            mHandler.removeCallbacksAndMessages(null)
+            tickHandler?.removeCallbacksAndMessages(null)
             mAttached = false
         }
     }
@@ -175,7 +178,7 @@ class Clock @JvmOverloads constructor(
         val availableWidth = right - left
         val availableHeight = bottom - top
 
-        //获取一半后，放图片
+        //获取一半后，放图片，中心点的位置。
         val x = availableWidth / 2
         val y = availableHeight / 2
 
@@ -202,7 +205,7 @@ class Clock @JvmOverloads constructor(
 
         var w: Int
         var h: Int
-        //画时针
+        //画时针:当前时间 十二分之几，获取角度
         canvas.rotate(mHour / 12.0f * 360.0f, x.toFloat(), y.toFloat())
         if (changed) {
             w = mHourHand.intrinsicWidth
@@ -210,9 +213,8 @@ class Clock @JvmOverloads constructor(
             mHourHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
         }
         mHourHand.draw(canvas)
-        canvas.restore()
 
-        //画分针
+        canvas.restore()
         canvas.save()
         canvas.rotate(mMinutes / 60.0f * 360.0f, x.toFloat(), y.toFloat())
         if (changed) {
@@ -221,9 +223,12 @@ class Clock @JvmOverloads constructor(
             mMinuteHand.setBounds(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
         }
         mMinuteHand.draw(canvas)
-        canvas.restore()
 
-        //画秒针
+        /**
+         * restore：用来恢复Canvas之前保存的状态。防止save后对Canvas执行的操作对后续的绘制有影响。
+         * save：用来保存Canvas的状态。save之后，可以调用Canvas的平移、放缩、旋转、错切、裁剪等操作。
+         * */
+        canvas.restore()
         canvas.save()
         canvas.rotate(mSecond / 60.0f * 360.0f, x.toFloat(), y.toFloat())
         val secondHand = mSecondHand
@@ -239,6 +244,7 @@ class Clock @JvmOverloads constructor(
         }
     }
 
+    //时间改变后，计算当前的时（加上分钟的比例）、分（加上秒针的比例）、秒
     private fun onTimeChanged() {
         mCalendar = Calendar.getInstance()
         val hour = mCalendar!!.get(Calendar.HOUR)
