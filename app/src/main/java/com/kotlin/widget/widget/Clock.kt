@@ -1,4 +1,4 @@
-package com.daiketong.module_man_manager.mvp.ui.widget
+package com.kotlin.widget.widget
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,7 +10,7 @@ import android.os.Handler
 import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.view.View
-import com.daiketong.module_man_manager.R
+import com.kotlin.widget.R
 import java.util.*
 
 
